@@ -17,12 +17,12 @@ public class Move : NetworkBehaviour
  
     CharacterController characterController; // Obj character con..
     Vector3 moveDirection = Vector3.zero;
-    float rotationX = 0;
+  
  
     [HideInInspector]
     public bool canMove = true;
  
-               [Header("Parametros grales")]      // parametros generales 
+    [Header("Parametros grales")]      // parametros generales 
     [SerializeField]private bool local;
     [SerializeField]private Animator anim;
     
@@ -30,7 +30,10 @@ public class Move : NetworkBehaviour
     [SerializeField]private int energia;
     [SerializeField]private int vidas;
     [SerializeField]private GameObject energiaBar;
- 
+    [SerializeField]private float golpeRate;
+    [SerializeField]private bool muerto;
+    
+    private bool shot;
 
     public override void OnStartClient() // se da prioridad a esta ejecucion
     {
@@ -131,42 +134,48 @@ void Local(){
 
 
 // GOLPE :::::::::::::::::::::::::::
-if(Input.GetButton("Fire1")){
+if(Input.GetButtonDown("Fire1") && shot==false ){
                             anim.SetInteger("ataque",1);  // envio anim de golpe
                             RaycastHit hit;
                             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.7f)){  // raycast para check de enemigo
 
-                                if(hit.collider.tag=="Player"){                             // si encuentro enemigo le envio un mensaje a funcion RemotoHit
-                                   hit.collider.SendMessage("RemotoHit",1);
-                                    }
+                                if(hit.collider.tag=="Player"){  
+                                         hit.collider.SendMessage("RemotoHit",1);
+                                                            // si encuentro enemigo le envio un mensaje a funcion RemotoHit
+                                             }
                                 
                             }
-
+ shot=true;
 
 }
 else
 anim.SetInteger("ataque",0);
-
+shot=false;
 
 //::::::::::::::::::::::::::::::::::
  
 
 }
 
+
+
+
+
 void Remoto(){}  // Temporal
 
-void RemotoHit(int golpe){
+public void RemotoHit(int golpe){
                                       // recibo mensaje con golpe
                             if(local==false){                 
-                                            energia-=golpe;   // le resto el golpe a la energia  (esto se hace en cliente pero la idea tambien es enviar la accion al Sv y calcular ahi)
+                                               // le resto el golpe a la energia  (esto se hace en cliente pero la idea tambien es enviar la accion al Sv y calcular ahi)
                                                             
                                                                             // envio al sv resultados
                                                             if(energia<1){
-                                                                            //anim.SetBool("muerte",true);
-                                                                            rpcMuerteSV(true,energia);  // 
-                                                                    
+                                                                            muerto=true;
+                                                                            rpcMuerteSV(muerto,energia);  // 
+
 
                                                             }else{
+                                                                            energia-=golpe;
                                                                             rpcMuerteSV(false,energia);
 
                                                             }
@@ -186,13 +195,17 @@ void RemotoHit(int golpe){
     [ObserversRpc]                                  // si soy client recibo del Sv los resultados , animo resto energia etc.
     public void rpcMuerte(bool muerte,int ener)
     {
+      
+      if(muerte==true){
+      anim.SetBool("muerte",muerte);
+      
+      }
 
-      anim.SetBool("muerte",true);
       energia=ener;
+      if(energia>=0)
       energiaBar.transform.localScale=new Vector3(0.08f,0.08f,ener*0.01f);
 
     }
-
 
 
 

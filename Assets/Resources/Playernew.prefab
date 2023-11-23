@@ -126,7 +126,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4e46cfd2d38582143be8d99d67a14215, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 849247261171442594}
   - component: {fileID: 6534776309685758771}
   - component: {fileID: 6795157240377577476}
+  - component: {fileID: 9007575455898079207}
   m_Layer: 0
   m_Name: Playernew
   m_TagString: Player
@@ -258,9 +259,11 @@ MonoBehaviour:
   canMove: 1
   local: 0
   anim: {fileID: 8118886037150421338}
-  energia: 150
+  energia: 70
   vidas: 0
   energiaBar: {fileID: 6619596228062817163}
+  golpeRate: 2
+  muerto: 0
 --- !u!114 &849247261171442594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +280,7 @@ MonoBehaviour:
   - {fileID: 8869730006072044012}
   - {fileID: 6534776309685758771}
   - {fileID: 6795157240377577476}
+  - {fileID: 9007575455898079207}
   SceneTransformProperties:
     Position: {x: 0, y: 1.26, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 1}
@@ -349,9 +353,25 @@ MonoBehaviour:
   IgnoredParameters: []
   _animator: {fileID: 8118886037150421338}
   _smoothFloats: 1
-  _synchronizeInterval: 0.117
+  _synchronizeInterval: 0.063
   _clientAuthoritative: 1
   _sendToOwner: 0
+--- !u!114 &9007575455898079207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8493947468238660582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb7bd88fd11b5d4aa7fca3d42172ab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 3
+  _addedNetworkObject: {fileID: 849247261171442594}
+  _networkObjectCache: {fileID: 849247261171442594}
+  _moveRate: 0.3
 --- !u!1001 &8208134509373137875
 PrefabInstance:
   m_ObjectHideFlags: 0
